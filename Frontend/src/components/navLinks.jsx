@@ -14,12 +14,7 @@ import { FaRegBell } from "react-icons/fa";
 
 const NavLinks = () => {
 
-    const handleLogout = () => {
-    // Elimina el token
-    localStorage.removeItem("token"); // o sessionStorage.removeItem("token"), dependiendo de dónde lo guardes
-    // Redirige al usuario a la página de inicio o de login
-    history.push("/login");
-  };
+
 
   
   return (
@@ -28,7 +23,7 @@ const NavLinks = () => {
         to={"/"}
         className="text-white hover:text-yellow-300 transition-colors duration-300"
       >
-        Salir Tuttle
+        Salir TuTTle
         <IoLogIn className="text-2xl" />
       </Link>
 
