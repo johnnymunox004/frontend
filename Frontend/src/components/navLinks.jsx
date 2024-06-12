@@ -1,26 +1,22 @@
-import React from "react";
-import { Link, useHistory } from "react-router-dom";
-import { IoLogIn } from "react-icons/io5";
-import { FaHome, FaUserAstronaut, FaBell, FaRegBell } from "react-icons/fa";
+import { FaHome } from "react-icons/fa";
 import { BsFillPersonLinesFill } from "react-icons/bs";
+import { FaBell } from "react-icons/fa";
+import { IoLogIn } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import React from "react";
+import { isAdmin } from "../utils/getUserById"; // Import your decodeToken function
+import { FaUserAstronaut } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
-import { isAdmin } from "../utils/getUserById";
+import { FaRegBell } from "react-icons/fa";
+
+
+
 
 const NavLinks = () => {
-  const history = useHistory();
-
-  const handleLogout = () => {
-    // Elimina el token
-    localStorage.removeItem("token"); // o sessionStorage.removeItem("token"), dependiendo de dónde lo guardes
-    // Redirige al usuario a la página de inicio o de login
-    history.push("/login");
-  };
-
   return (
     <div className="flex flex-row items-center p-4 rounded-lg shadow-md gap-12">
       <Link 
-        to="#"
-        onClick={handleLogout}
+        to={"/"}
         className="text-white hover:text-yellow-300 transition-colors duration-300"
       >
         Salir Tuttle
