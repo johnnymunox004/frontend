@@ -1,4 +1,7 @@
-﻿# cd getorEmpldeados
+Admin 
+Username: user15
+Password: user15
 
-# cd BackEnd
-# cd FrontEnd
+Usuario
+Username:  user150
+Password: user150
