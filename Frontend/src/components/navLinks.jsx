@@ -13,10 +13,20 @@ import { FaRegBell } from "react-icons/fa";
 
 
 const NavLinks = () => {
+
+   const handleLogout = () => {
+    // Elimina el token
+    localStorage.removeItem("token"); // o sessionStorage.removeItem("token"), dependiendo de dónde lo guardes
+    // Redirige al usuario a la página de inicio o de login
+    history.push("/login");
+  };
+
+  
   return (
     <div className="flex flex-row items-center p-4 rounded-lg shadow-md gap-12">
-      <Link 
+ <Link 
         to={"/"}
+        onClick={handleLogout}
         className="text-white hover:text-yellow-300 transition-colors duration-300"
       >
         Salir Tuttle
