@@ -40,7 +40,7 @@ export default function Home() {
   <div className="text-5xl text-white font-bold">Tuttle</div>
   <div className="flex space-x-4">
     <Link to='/login' className="text-2xl text-white hover:text-gray-300 transition-colors duration-200">
-      Inicio
+      Iniciar  
     </Link>
   </div>
 </nav>
