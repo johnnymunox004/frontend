@@ -9,7 +9,8 @@ const useAspirantesStore = create((set) => ({
   fetchAspirantes: async () => {
     set({ loading: true });
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');  //no funciono porque el link estaba mal copiado
+      
       const response = await axios.get("https://back-gestor-empleados.onrender.com/api/aspirantes", {
         headers: {
           "Content-Type": "application/json",
