@@ -2,7 +2,7 @@ import { FaHome } from "react-icons/fa";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 import { FaBell } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { isAdmin, isUser, hasNoToken } from "../utils/getUserById"; // Importa tus funciones de utilidades
 import { FaUserAstronaut } from "react-icons/fa6";
@@ -10,19 +10,19 @@ import { CgProfile } from "react-icons/cg";
 import { FaRegBell } from "react-icons/fa";
 
 const NavLinks = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (hasNoToken()) {
-      history.push("/login");
+      navigate("/login");
     }
-  }, [history]);
+  }, [navigate]);
 
   const handleLogout = () => {
     // Elimina el token
     localStorage.removeItem("token"); // o sessionStorage.removeItem("token"), dependiendo de dónde lo guardes
     // Redirige al usuario a la página de inicio o de login
-    history.push("/login");
+    navigate("/login");
   };
 
   return (
