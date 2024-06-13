@@ -151,7 +151,7 @@ const LoginPage = () => {
         </form>
         <footer>
           <div className="flex justify-between">
-            <Link className="text-indigo-700 hover:text-pink-700 text-sm" to="#">c</Link>
+            <Link className="text-indigo-700 hover:text-pink-700 text-sm" to="#"></Link>
             <Link className="text-indigo-700 hover:text-pink-700 text-sm" to="#" onClick={() => setIsRegistering(!isRegistering)}>
               {isRegistering ? 'Login' : ''}
             </Link>
