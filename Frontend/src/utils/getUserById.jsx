@@ -1,4 +1,4 @@
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const getToken = () => localStorage.getItem("token");
 
@@ -27,9 +27,18 @@ const isAdmin = () => {
   return decodedToken ? decodedToken.rol === "Administrador" : false; // Asegúrate de que el campo `rol` esté en el token
 };
 
+const isUser = () => {
+  const decodedToken = decodeToken();
+  return decodedToken ? decodedToken.rol === "Usuario" : false; // Asegúrate de que el campo `rol` esté en el token
+};
+
+const hasNoToken = () => {
+  return !getToken();
+};
+
 const getUserDataFromToken = () => {
   const decodedToken = decodeToken();
   return decodedToken || null;
 };
 
-export { getUserIdFromToken, isAdmin, getUserDataFromToken };
+export { getUserIdFromToken, isAdmin, isUser, hasNoToken, getUserDataFromToken };
