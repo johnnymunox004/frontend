@@ -49,29 +49,33 @@ function DashboarEmpleados() {
     setFormData({ ...formData, file });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (editMode) {
-      await updateAspirante(currentId, formData);
-    } else {
-      await createAspirante(formData);
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // Agregar la asignación del rol antes de enviar el formulario
+  const formDataWithRole = { ...formData, rol: "empleado" };
 
-    setShowModal(false);
-    setFormData({
-      nombre: "",
-      identificacion: "",
-      edad: "",
-      sexo: "",
-      rol: "",
-      file: "",
-      email: "",
-      telefono: "",
-      estado: "",
-      date_create: "",
-    });
-    setEditMode(false);
-  };
+  if (editMode) {
+    await updateAspirante(currentId, formDataWithRole);
+  } else {
+    await createAspirante(formDataWithRole);
+  }
+
+  setShowModal(false);
+  setFormData({
+    nombre: "",
+    identificacion: "",
+    edad: "",
+    sexo: "",
+    rol: "", // El rol se limpia aquí
+    file: "",
+    email: "",
+    telefono: "",
+    estado: "",
+    date_create: "",
+  });
+  setEditMode(false);
+};
+
 
   const handleEdit = (aspirante) => {
     setCurrentId(aspirante._id);
