@@ -6,8 +6,6 @@ import { CSVLink } from "react-csv";
 import GeneradorPDF from "../components/GeneradorPDF";
 import LoadingSpinner from "../components/loadingSpinner";
 
-
-
 function DashboardListAspirant() {
   const {
     aspirantes,
@@ -49,7 +47,9 @@ function DashboardListAspirant() {
     if (editMode) {
       updateAspirante(currentId, formData);
     } else {
-      createAspirante(formData);
+      createAspirante(formData).then(() => {
+        window.location.reload();
+      });
     }
     setShowModal(false);
     setFormData({
@@ -332,4 +332,5 @@ function DashboardListAspirant() {
     </div>
   );
 }
+
 export default DashboardListAspirant;
