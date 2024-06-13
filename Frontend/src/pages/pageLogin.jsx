@@ -71,7 +71,7 @@ const LoginPage = () => {
     <div className="flex h-40 bg-indigo-700 w-80 mt-14  ">
       <div className="w-full max-w-xs m-auto bg-indigo-100 rounded p-5">
         <header>
-          <img className="w-20 mx-auto mb-5" src="https://img.icons8.com/fluent/344/year-of-tiger.png" alt="logo" />
+          <img className="w-20 mx-auto mb-5"  />
         </header>
         <h2 className="text-2xl font-bold text-center mb-4">{isRegistering ? 'Register' : 'Login'}</h2>
         <form onSubmit={isRegistering ? handleRegister : handleLogin}>
