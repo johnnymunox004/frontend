@@ -92,6 +92,18 @@ const NavLinks = () => {
             Empleados
             <FaHome className="text-2xl" />
           </Link>
+                    <Link
+            to={"/notificaciones"}
+            className="text-white hover:text-yellow-300 transition-colors duration-300"
+          >
+            Notificaciones
+            <FaBell className="text-2xl" />
+          </Link>
+
+          <Link
+            to={"/creaaenotificaciones"}
+            className="text-white hover:text-yellow-300 transition-colors duration-300"
+          >
           <Link
             to={"/creaaenotificaciones"}
             className="text-white hover:text-yellow-300 transition-colors duration-300"
