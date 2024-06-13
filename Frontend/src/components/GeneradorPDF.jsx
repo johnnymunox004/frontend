@@ -25,7 +25,7 @@ function GeneradorPDF({ id, nombre, telefono, correo, file, Identificación, Tel
     doc.text(`Teléfono: ${Teléfono}`, 14, 70);
     doc.text(`Sexo: ${sexo}`, 14, 80);
     doc.text(`Edad: ${edad}`, 14, 90);
-    doc.text(`Edad: ${file}`, 14, 100);
+    doc.text(`file: ${file}`, 14, 100);
 
 
     // Agregar línea de separación
