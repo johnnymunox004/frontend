@@ -1,13 +1,11 @@
 import { FaHome } from "react-icons/fa";
 import { BsFillPersonLinesFill } from "react-icons/bs";
-import { FaBell } from "react-icons/fa";
+import { FaBell, FaUserAstronaut, FaRegBell } from "react-icons/fa";
 import { IoLogIn } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import { isAdmin, isUser, hasNoToken } from "../utils/getUserById"; // Importa tus funciones de utilidades
-import { FaUserAstronaut } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
-import { FaRegBell } from "react-icons/fa";
 
 const NavLinks = () => {
   const navigate = useNavigate();
@@ -92,7 +90,7 @@ const NavLinks = () => {
             Empleados
             <FaHome className="text-2xl" />
           </Link>
-                    <Link
+          <Link
             to={"/notificaciones"}
             className="text-white hover:text-yellow-300 transition-colors duration-300"
           >
@@ -100,10 +98,6 @@ const NavLinks = () => {
             <FaBell className="text-2xl" />
           </Link>
 
-          <Link
-            to={"/creaaenotificaciones"}
-            className="text-white hover:text-yellow-300 transition-colors duration-300"
-          >
           <Link
             to={"/creaaenotificaciones"}
             className="text-white hover:text-yellow-300 transition-colors duration-300"
