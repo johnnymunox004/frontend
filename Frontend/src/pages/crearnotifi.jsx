@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import NavLinks from "../components/navLinks";
 
 const CreateNotificationPage = () => {
@@ -9,6 +8,7 @@ const CreateNotificationPage = () => {
   const [quien, setQuien] = useState("");
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,8 +22,13 @@ const CreateNotificationPage = () => {
         "https://back-gestor-empleados.onrender.com/api/notifi",
         { action, solicitud, quien }
       );
+      setSuccessMessage("Notificación creada con éxito.");
+      setFormError("");
+      setAction("");
+      setSolicitud("");
+      setQuien("");
       // Redireccionar a la página de notificaciones después de crear la notificación
-      window.location.href = "/dashboard/list-empleados";
+      // window.location.href = "/dashboard/list-empleados";
     } catch (error) {
       setError("Se produjo un error al crear la notificación.");
     }
@@ -39,6 +44,9 @@ const CreateNotificationPage = () => {
           <div className="bg-white rounded-lg p-6 w-96 shadow-md">
             <h2 className="text-2xl font-bold mb-4">Crear Notificación</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
+            {successMessage && (
+              <p className="text-green-500 mb-4">{successMessage}</p>
+            )}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
@@ -93,9 +101,7 @@ const CreateNotificationPage = () => {
                 Crear Notificación
               </button>
             </form>
-            <div className="mt-4">
-
-            </div>
+            <div className="mt-4"></div>
           </div>
         </div>
       </div>
