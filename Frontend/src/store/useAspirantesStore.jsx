@@ -38,6 +38,22 @@ const useAspirantesStore = create((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+    createEmpleados: async (newAspirante) => {
+    set({ loading: true });
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post("https://back-gestor-empleados.onrender.com/api/empleados", newAspirante, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+      set((state) => ({ aspirantes: [...state.aspirantes, newAspirante], loading: false }));
+    } catch (error) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
 
   updateAspirante: async (id, updatedAspirante) => {
     set({ loading: true });
