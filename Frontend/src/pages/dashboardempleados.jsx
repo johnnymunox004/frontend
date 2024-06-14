@@ -19,6 +19,7 @@ function DashboarEmpleados() {
   } = useAspirantesStore();
 
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     identificacion: "",
@@ -31,6 +32,7 @@ function DashboarEmpleados() {
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     fetchAspirantes();
@@ -84,8 +86,10 @@ function DashboarEmpleados() {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteAspirante(id);
+  const handleDelete = async () => {
+    await deleteAspirante(deleteId);
+    setShowDeleteModal(false);
+    setDeleteId(null);
   };
 
   if (loading) return <div><LoadingSpinner /></div>;
@@ -183,17 +187,6 @@ function DashboarEmpleados() {
                 <p>Sexo: {aspirante.sexo}</p>
                 <p>Rol: {aspirante.rol}</p>
                 <p>Email: {aspirante.email}</p>
-                <p>
-                  Links:{" "}
-                  <a
-                    href={aspirante.file}
-                    target="_blank"
-                    className="text-blue-400"
-                    rel="noopener noreferrer"
-                  >
-                    {aspirante.file}
-                  </a>
-                </p>
                 <p>Teléfono: {aspirante.telefono}</p>
                 <div className="flex flex-col gap-4 mt-2">
                   {isAdmin() && (
@@ -219,7 +212,10 @@ function DashboarEmpleados() {
                   {isAdmin() && (
                     <Button
                       color="failure"
-                      onClick={() => handleDelete(aspirante._id)}
+                      onClick={() => {
+                        setDeleteId(aspirante._id);
+                        setShowDeleteModal(true);
+                      }}
                     >
                       Eliminar
                     </Button>
@@ -313,6 +309,20 @@ function DashboarEmpleados() {
               </Button>
             </div>
           </form>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <Modal.Header>Confirmar Eliminación</Modal.Header>
+        <Modal.Body>
+          <p>¿Estás seguro de que deseas eliminar este empleado?</p>
+          <div className="mt-4 flex justify-between">
+            <Button color="failure" onClick={handleDelete}>
+              Eliminar
+            </Button>
+            <Button onClick={() => setShowDeleteModal(false)} color="gray">
+              Cancelar
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>
