@@ -17,6 +17,7 @@ function DashboardListAspirant() {
     deleteAspirante,
   } = useAspirantesStore();
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     identificacion: "",
@@ -31,6 +32,7 @@ function DashboardListAspirant() {
   });
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -74,11 +76,13 @@ function DashboardListAspirant() {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteAspirante(id);
+  const handleDelete = async () => {
+    await deleteAspirante(deleteId);
+    setShowDeleteModal(false);
+    setDeleteId(null);
   };
 
-  if (loading) return <div><LoadingSpinner/></div>;
+  if (loading) return <div><LoadingSpinner /></div>;
   if (error)
     return (
       <div>
@@ -116,24 +120,19 @@ function DashboardListAspirant() {
       aspirante.email.toLowerCase().includes(searchTermLower) ||
       aspirante.identificacion.toLowerCase().includes(searchTermLower) ||
       aspirante.edad.toString().includes(searchTermLower) ||
-      aspirante.telefono.includes(searchTermLower)||
+      aspirante.telefono.includes(searchTermLower) ||
       aspirante.sexo.includes(searchTermLower)
-
     );
-  }
-
-);
-  
+  });
 
   return (
     <div className="container-dashboard">
-     
       <div className="aside-dashboard">
         <NavLinks />
       </div>
       <div className="main-dashboard">
         <div className="p-4">
-          <h1 className="text-2xl font-bold mt-6 mb-4">Aspirantes</h1> 
+          <h1 className="text-2xl font-bold mt-6 mb-4">Aspirantes</h1>
           <div className="mb-4">
             <input
               type="text"
@@ -152,7 +151,7 @@ function DashboardListAspirant() {
           </Button>
           <CSVLink
             data={csvData}
-            filename={"empleados.csv"}
+            filename={"aspirantes.csv"}
             className="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             target="_blank"
           >
@@ -180,13 +179,12 @@ function DashboardListAspirant() {
                       {aspirante.file}
                     </a>
                   </p>
-
                   <p>Teléfono: {aspirante.telefono}</p>
                   <p>Estado: {aspirante.estado}</p>
                   <Button
                     onClick={() => handleEdit(aspirante)}
                     className="mr-2"
-                    color="warning"
+                                       color="warning"
                   >
                     Editar
                   </Button>
@@ -203,7 +201,10 @@ function DashboardListAspirant() {
                   />
                   <Button
                     color="failure"
-                    onClick={() => handleDelete(aspirante._id)}
+                    onClick={() => {
+                      setDeleteId(aspirante._id);
+                      setShowDeleteModal(true);
+                    }}
                   >
                     Eliminar
                   </Button>
@@ -249,7 +250,7 @@ function DashboardListAspirant() {
                 required
               />
             </div>
-                  <div className="flex flex-col mb-4">
+            <div className="flex flex-col mb-4">
               <label htmlFor="sexo" className="mb-1 font-medium">
                 Sexo:
               </label>
@@ -328,6 +329,21 @@ function DashboardListAspirant() {
             </Button>
           </form>
         </Modal.Body>
+      </Modal>
+
+      <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <Modal.Header>Confirmar Eliminación</Modal.Header>
+        <Modal.Body>
+          <p>¿Está seguro que desea eliminar este aspirante?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" onClick={handleDelete}>
+            Eliminar
+          </Button>
+          <Button color="gray" onClick={() => setShowDeleteModal(false)}>
+            Cancelar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
