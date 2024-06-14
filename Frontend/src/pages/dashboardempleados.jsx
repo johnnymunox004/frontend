@@ -13,7 +13,7 @@ function DashboarEmpleados() {
     fetchAspirantes,
     loading,
     error,
-    createAspirante,
+    createEmpleados,
     updateAspirante,
     deleteAspirante,
   } = useAspirantesStore();
@@ -57,7 +57,7 @@ const handleSubmit = async (e) => {
   if (editMode) {
     await updateAspirante(currentId, formDataWithRole);
   } else {
-    await createAspirante(formDataWithRole);
+    await createEmpleados(formDataWithRole);
   }
 
   setShowModal(false);
