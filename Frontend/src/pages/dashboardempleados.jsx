@@ -24,12 +24,9 @@ function DashboarEmpleados() {
     identificacion: "",
     edad: "",
     sexo: "",
-    rol: "",
     file: "",
     email: "",
     telefono: "",
-    estado: "",
-    date_create: "",
   });
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
@@ -49,37 +46,40 @@ function DashboarEmpleados() {
     setFormData({ ...formData, file });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  // Agregar la asignación del rol antes de enviar el formulario
-  const formDataWithRole = { ...formData, rol: "empleado" };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formDataWithRole = { ...formData, rol: "empleado" };
 
-  if (editMode) {
-    await updateAspirante(currentId, formDataWithRole);
-  } else {
-    await createEmpleados(formDataWithRole);
-  }
+    if (editMode) {
+      await updateAspirante(currentId, formDataWithRole);
+    } else {
+      await createEmpleados(formDataWithRole);
+    }
 
-  setShowModal(false);
-  setFormData({
-    nombre: "",
-    identificacion: "",
-    edad: "",
-    sexo: "",
-    rol: "", // El rol se limpia aquí
-    file: "",
-    email: "",
-    telefono: "",
-    estado: "",
-    date_create: "",
-  });
-  setEditMode(false);
-};
-
+    setShowModal(false);
+    setFormData({
+      nombre: "",
+      identificacion: "",
+      edad: "",
+      sexo: "",
+      file: "",
+      email: "",
+      telefono: "",
+    });
+    setEditMode(false);
+  };
 
   const handleEdit = (aspirante) => {
     setCurrentId(aspirante._id);
-    setFormData(aspirante);
+    setFormData({
+      nombre: aspirante.nombre,
+      identificacion: aspirante.identificacion,
+      edad: aspirante.edad,
+      sexo: aspirante.sexo,
+      file: aspirante.file,
+      email: aspirante.email,
+      telefono: aspirante.telefono,
+    });
     setEditMode(true);
     setShowModal(true);
   };
@@ -88,7 +88,7 @@ const handleSubmit = async (e) => {
     deleteAspirante(id);
   };
 
-  if (loading) return <div><LoadingSpinner></LoadingSpinner></div>;
+  if (loading) return <div><LoadingSpinner /></div>;
   if (error)
     return (
       <div
@@ -104,7 +104,7 @@ const handleSubmit = async (e) => {
       </div>
     );
 
-  const filteredAspirantes = aspirantes.filter((aspirante) =>
+  const filteredAspirantes = aspirantes.filter((aspirante) => 
     aspirante.rol === "empleado"
   ).filter((aspirante) => {
     const searchTermLower = searchTerm.toLowerCase();
@@ -126,8 +126,6 @@ const handleSubmit = async (e) => {
     Rol: aspirante.rol,
     Email: aspirante.email,
     Teléfono: aspirante.telefono,
-    Estado: aspirante.estado,
-    Fecha_Creacion: aspirante.date_create,
   }));
 
   return (
@@ -141,7 +139,7 @@ const handleSubmit = async (e) => {
           <h1 className="text-2xl font-bold mb-4">Empleados</h1>
           <input
             type="text"
-            placeholder="Buscar aspirante..."
+            placeholder="Buscar empleado..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
@@ -158,12 +156,9 @@ const handleSubmit = async (e) => {
                   identificacion: "",
                   edad: "",
                   sexo: "",
-                  rol: "",
                   file: "",
                   email: "",
                   telefono: "",
-                  estado: "",
-                  date_create: "",
                 });
               }}
             >
@@ -200,7 +195,6 @@ const handleSubmit = async (e) => {
                   </a>
                 </p>
                 <p>Teléfono: {aspirante.telefono}</p>
-                <p>Estado: {aspirante.estado}</p>
                 <div className="flex flex-col gap-4 mt-2">
                   {isAdmin() && (
                     <Button
@@ -283,10 +277,9 @@ const handleSubmit = async (e) => {
                 required
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
               >
-                <option value="">Seleccione...</option>///////////////////////////////////////////////////////////////////////////////////////
+                <option value="">Seleccione...</option>
                 <option value="Masculino">Masculino</option>
-
-<option value="Femenino">Femenino</option>
+                <option value="Femenino">Femenino</option>
               </select>
             </div>
             <div className="mb-2">
@@ -311,7 +304,6 @@ const handleSubmit = async (e) => {
                 required
               />
             </div>
-
             <div className="mt-4 flex justify-between">
               <Button color="success" type="submit">
                 {editMode ? "Actualizar" : "Agregar"}
@@ -328,4 +320,3 @@ const handleSubmit = async (e) => {
 }
 
 export default DashboarEmpleados;
-
