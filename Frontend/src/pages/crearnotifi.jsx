@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import NavLinks from "../components/navLinks";
+import { Modal, Button } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 const CreateNotificationPage = () => {
   const [action, setAction] = useState("");
@@ -8,7 +10,9 @@ const CreateNotificationPage = () => {
   const [quien, setQuien] = useState("");
   const [error, setError] = useState("");
   const [formError, setFormError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,16 +26,19 @@ const CreateNotificationPage = () => {
         "https://back-gestor-empleados.onrender.com/api/notifi",
         { action, solicitud, quien }
       );
-      setSuccessMessage("Notificación creada con éxito.");
+      setShowSuccessModal(true);
       setFormError("");
       setAction("");
       setSolicitud("");
       setQuien("");
-      // Redireccionar a la página de notificaciones después de crear la notificación
-      // window.location.href = "/dashboard/list-empleados";
     } catch (error) {
       setError("Se produjo un error al crear la notificación.");
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowSuccessModal(false);
+    navigate("/notificaciones");
   };
 
   return (
@@ -44,9 +51,6 @@ const CreateNotificationPage = () => {
           <div className="bg-white rounded-lg p-6 w-96 shadow-md">
             <h2 className="text-2xl font-bold mb-4">Crear Notificación</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            {successMessage && (
-              <p className="text-green-500 mb-4">{successMessage}</p>
-            )}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label
@@ -101,10 +105,20 @@ const CreateNotificationPage = () => {
                 Crear Notificación
               </button>
             </form>
-            <div className="mt-4"></div>
           </div>
         </div>
       </div>
+      <Modal show={showSuccessModal} onClose={handleCloseModal}>
+        <Modal.Header>Notificación Creada</Modal.Header>
+        <Modal.Body>
+          <p>La notificación ha sido creada con éxito.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleCloseModal} color="success">
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
