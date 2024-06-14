@@ -7,7 +7,6 @@ import { isAdmin, getUserDataFromToken } from "../utils/getUserById.jsx";
 import LoadingSpinner from "../components/loadingSpinner.jsx";
 import GeneradorUserPDF from "../components/generdorPdfUsers.jsx";
 
-
 function DashboardUsuarios() {
   const {
     userList,
@@ -20,6 +19,7 @@ function DashboardUsuarios() {
   } = useUserStore();
 
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [formData, setFormData] = useState({
     user: "",
     name: "",
@@ -30,6 +30,7 @@ function DashboardUsuarios() {
   });
   const [editMode, setEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   const userData = getUserDataFromToken();
   const userIsAdmin = isAdmin();
@@ -50,7 +51,7 @@ function DashboardUsuarios() {
     } else {
       await createUser(formData);
     }
-
+    fetchUserList();
     setShowModal(false);
     setFormData({
       user: "",
@@ -70,11 +71,13 @@ function DashboardUsuarios() {
     setShowModal(true);
   };
 
-  const handleDelete = (id) => {
-    deleteUser(id);
+  const handleDelete = async () => {
+    await deleteUser(deleteId);
+    fetchUserList();
+    setShowDeleteModal(false);
   };
 
-  if (loading) return <div><LoadingSpinner></LoadingSpinner></div>;
+  if (loading) return <div><LoadingSpinner /></div>;
   if (error)
     return (
       <div
@@ -92,7 +95,7 @@ function DashboardUsuarios() {
 
   // Filtrar usuarios según el rol del usuario
   const usuarios = userIsAdmin
-    ? userList.filter((user) => user.rol != "wert" )
+    ? userList.filter((user) => user.rol !== "wert")
     : userList.filter(
         (user) =>
           user.rol === "empleado" &&
@@ -108,9 +111,6 @@ function DashboardUsuarios() {
     Departamento: user.departamento,
     Fecha_Creacion: user.date_create,
   }));
-
-  // Agrupar usuarios por departamento
-
 
   return (
     <div className="container-dashboard">
@@ -138,7 +138,7 @@ function DashboardUsuarios() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-4">
             {usuarios.map((user) => (
-                <Card key={user._id}>
+              <Card key={user._id}>
                 <h2 className="text-xl font-bold">{user.name}</h2>
                 <p>User: {user.user}</p>
                 <p>Email: {user.email}</p>
@@ -152,25 +152,23 @@ function DashboardUsuarios() {
                 </Button>
                 <Button
                   color="failure"
-                  onClick={() => handleDelete(user._id)}
+                  onClick={() => {
+                    setDeleteId(user._id);
+                    setShowDeleteModal(true);
+                  }}
                 >
                   Eliminar
                 </Button>
                 <GeneradorUserPDF
-                id={user._id}
-                name={user.name}
-                user={user.user}
-                email={user.email}
-                rol={user.rol}
-
-                ></GeneradorUserPDF>
+                  id={user._id}
+                  name={user.name}
+                  user={user.user}
+                  email={user.email}
+                  rol={user.rol}
+                />
               </Card>
             ))}
           </div>
-
-          {userIsAdmin && (
-            <></>
-          )}
         </div>
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
@@ -178,72 +176,81 @@ function DashboardUsuarios() {
           {editMode ? "Editar Usuario" : "Agregar Usuario"}
         </Modal.Header>
         <Modal.Body>
-  <form onSubmit={handleSubmit}>
-    <div className="mb-2">
-      <Label htmlFor="user" value="User" />
-      <TextInput
-        id="user"
-        name="user"
-        value={formData.user}
-        onChange={handleInputChange}
-        required
-      />
-    </div>
-    <div className="mb-2">
-      <Label htmlFor="name" value="Name" />
-      <TextInput
-        id="name"
-        name="name"
-        value={formData.name}
-        onChange={handleInputChange}
-        required
-      />
-    </div>
-
-    <div className="mb-2">
-      <Label htmlFor="email" value="Email" />
-      <TextInput
-        id="email"
-        name="email"
-        value={formData.email}
-        onChange={handleInputChange}
-        required
-      />
-    </div>
-
-    <select
-      id="rol"
-      name="rol"
-      value={formData.rol}
-      onChange={handleInputChange}
-      required
-      className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
-    >
-      <option value="#">Seleccione El Rol</option>
-      <option value="Usuario">Usuario</option>
-      <option value="Administrador">Administrador</option>
-    </select>
-
-    {!editMode && ( // Only show password field if not in edit mode
-      <div className="mb-2">
-        <Label htmlFor="password" value="Password" />
-        <TextInput
-          id="password"
-          name="password"
-          type="password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required // Required when creating a new user
-        />
-      </div>
-    )}
-
-    <Button color="success" type="submit">
-      {editMode ? "Actualizar" : "Crear"}
-    </Button>
-  </form>
-</Modal.Body>
-
+          <form onSubmit={handleSubmit}>
+            <div className="mb-2">
+              <Label htmlFor="user" value="User" />
+              <TextInput
+                id="user"
+                name="user"
+                value={formData.user}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <Label htmlFor="name" value="Name" />
+              <TextInput
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="mb-2">
+              <Label htmlFor="email" value="Email" />
+              <TextInput
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <select
+              id="rol"
+              name="rol"
+              value={formData.rol}
+              onChange={handleInputChange}
+              required
+              className="px-4 py-2 border rounded-lg focus:outline-none focus:border-blue-500"
+            >
+              <option value="#">Seleccione El Rol</option>
+              <option value="Usuario">Usuario</option>
+              <option value="Administrador">Administrador</option>
+            </select>
+            {!editMode && (
+              <div className="mb-2">
+                <Label htmlFor="password" value="Password" />
+                <TextInput
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            )}
+            <Button color="success" type="submit">
+              {editMode ? "Actualizar" : "Crear"}
+            </Button>
+          </form>
+        </Modal.Body>
+      </Modal>
+      <Modal show={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <Modal.Header>Confirmar Eliminación</Modal.Header>
+        <Modal.Body>
+          <p>¿Está seguro que desea eliminar este usuario?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button color="failure" onClick={handleDelete}>
+            Eliminar
+          </Button>
+          <Button color="gray" onClick={() => setShowDeleteModal(false)}>
+            Cancelar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </div>
   );
